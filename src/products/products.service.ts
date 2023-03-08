@@ -10,13 +10,26 @@ export class ProductsService {
   constructor(
     @Inject('MICROSERVICES_API_B') private readonly client: ClientProxy,
     @InjectModel(Product.name)
-    private productModel: Model<ProductDocument>,
+    private readonly productModel: Model<ProductDocument>,
   ) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-    const createdProduct = await this.productModel.create(createProductDto);
+    const productExists = await this.findOneByName(createProductDto.nome);
+
+    if (productExists) {
+      throw new Error('ProdutoExistente');
+    }
+
+    const createdProduct = new this.productModel(createProductDto);
+
+    await createdProduct.save();
+
     this.client.emit('createProduct', createdProduct);
 
     return createdProduct;
+  }
+
+  async findOneByName(name: string) {
+    return await this.productModel.findOne({ nome: name });
   }
 }

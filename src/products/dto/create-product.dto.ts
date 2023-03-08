@@ -1,5 +1,5 @@
 export class CreateProductDto {
-  nome: string;
-  descrição: string;
-  valor: number;
+  readonly nome: string;
+  readonly descrição: string;
+  readonly valor: number;
 }

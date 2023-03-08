@@ -1,4 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 
@@ -8,6 +14,37 @@ export class ProductsController {
 
   @Post('product')
   async createProduct(@Body() createProductDto: CreateProductDto) {
-    await this.productsService.createProduct(createProductDto);
+    try {
+      const createdProduct = await this.productsService.createProduct(
+        createProductDto,
+      );
+
+      return createdProduct;
+    } catch (error) {
+      console.log(error);
+      if (error.message === 'ProdutoExistente') {
+        console.log('entrou aqui');
+        throw new HttpException(
+          {
+            status: HttpStatus.CONFLICT,
+            error: 'O produto já está cadastrado na base de dados',
+          },
+          HttpStatus.CONFLICT,
+          {
+            cause: error,
+          },
+        );
+      }
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 }
