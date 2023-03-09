@@ -15,7 +15,7 @@ import { Product, ProductSchema } from './schemas/products.schema';
         options: {
           urls: ['amqp://localhost:5672'],
           queue: 'products',
-          noAck: true,
+          noAck: false,
           queueOptions: {
             durable: false,
           },
