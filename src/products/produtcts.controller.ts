@@ -8,11 +8,11 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsService } from './products.service';
 
-@Controller()
+@Controller('product')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Post('product')
+  @Post()
   async createProduct(@Body() createProductDto: CreateProductDto) {
     try {
       const createdProduct = await this.productsService.createProduct(

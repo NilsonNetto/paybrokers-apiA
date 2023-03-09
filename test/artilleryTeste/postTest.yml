@@ -1,18 +1,20 @@
 config:
-  target: 'http://localhost:4000/'
+  target: 'http://localhost:4000'
   phases:
-    - duration: 10
-    - arrivalRate: 5
+    - duration: 60
+      arrivalRate: 150
   processor: './processor.js'
 
 scenarios:
   - name: 'post payload'
     flow:
+      - function: 'generateProductData'
       - post:
-        url: '/products'
-        beforeRequest: generateProductData
-        json:
-          nome: '{{ nome }}'
-          valor: '{{ valor }}'
-          descrição: '{{ descrição }}'
-#artillery run test/artilleryTeste/postTest.yml
+          url: '/product'
+          json:
+            'nome': '{{ nome }}'
+            'valor': '{{ valor }}'
+            'descrição': 'descrição produto'
+      - log: 'produto {{nome}}'
+#artillery run -o report.json test/artilleryTeste/postTest.yml
+#artillery report -o report.html report.json;

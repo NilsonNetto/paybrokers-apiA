@@ -15,3 +15,20 @@ services:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'Produtos_Api_B'
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '13306:3306'
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
