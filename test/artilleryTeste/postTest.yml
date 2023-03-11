@@ -1,8 +1,8 @@
 config:
   target: 'http://localhost:4000'
   phases:
-    - duration: 30
-      arrivalRate: 15
+    - duration: 60
+      arrivalRate: 250
   processor: './processor.js'
 
 scenarios:
