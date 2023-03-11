@@ -2,11 +2,11 @@
 
 ## About
 
-The challenge is about to create two APIs focused on microservices.
+The challenge is about to creating two APIs focused on microservices communication.
 
-The API-A has a POST route, that receive an product (name, description, value), save the product on a MongoDB collection, send this to API-B and return the created product.
+The API-A has a POST route, that receives a product (name, description, value), verifies the existence of the product name on the MongoDB database, case exists returns a message warning that the product already exists, case not, saves the product on a MongoDB collection, send this to API-B, and returns the created product.
 
-The API-B receive the product via RabbitMQ, create the product on a MySQL database. API-B also has a get route.
+The API-B receives the product via RabbitMQ, verifies the existence of the product name on the MySQL database, case exists, the product is discarded, case not exists, creates the product on a MySQL database. API-B also has a get product list route, that returns an array of products, and a get product by name route, returning a product selected by his name.
 
 ## Technologies
 
@@ -26,25 +26,52 @@ The project also use Mongoose and TypeORM.
 
 1. Clone this repository
 
-2. Install dependencies
+2. Clone the API-B repository on this [link](https://github.com/NilsonNetto/paybrokers-apiB)
+
+3. From API-A folder, run the docker-compose with the MongoDB, MySQL and RabbitMQ images
+
+```bash
+docker-compose up --build
+```
+
+4. Install dependencies on API-A and API-B
 
 ```bash
 npm install
 ```
 
-3. Clone the back-end repository on this [link](https://github.com/NilsonNetto/paybrokers-apiB)
-
-4. Follow the instructions to run the back-end
-
-5. Create an .env file following the .env.example variables (back-end URL)
-
-6. Run the front-end with
+5. With the docker-compose running, start the API-A and API-B
 
 ```bash
 npm start
 ```
 
-6. Access the app in http://localhost:3000 on your favorite browser
+6. Acess the APIs routes
+
+## Routes
+
+### Api-A (localhost:4000)
+
+- POST /product
+
+```json
+//Body
+  "nome": "product name" //(string),
+  "valor": value //(number),
+  "descrição": "product description" //(string, optional)
+```
+
+### Api-B (localhost:4001)
+
+- GET /products?page=1&limit=10
+
+This route return an array of products.
+You can add a query params for pages (default = 1) and limit products by page (default = 10)
+
+- GET /products/:name
+
+This route return the product by name if it exists.
+Spaces in product name must by written with "%20" instead of spaces
 
 ## Developer
 

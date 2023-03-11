@@ -21,9 +21,7 @@ export class ProductsController {
 
       return createdProduct;
     } catch (error) {
-      console.log(error);
       if (error.message === 'ProdutoExistente') {
-        console.log('entrou aqui');
         throw new HttpException(
           {
             status: HttpStatus.CONFLICT,
